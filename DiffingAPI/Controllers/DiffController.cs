@@ -23,6 +23,7 @@ namespace DiffingAPI.Controllers
         [Route("/v1/diff/{id}/{side}")]
         public IActionResult Get(int id, side side)
         {
+
                 return Ok($"returning value for id: {id} on {side} side");
         }
 
