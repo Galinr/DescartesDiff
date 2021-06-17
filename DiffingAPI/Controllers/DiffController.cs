@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DiffLibrary.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,12 @@ namespace DiffingAPI.Controllers
         /// <summary>
         /// return data za določen ID in Stran
         /// </summary>
-        /// <param name="id">ID vnosa</param>
-        /// <param name="side">Stran vnosa</param>
+        /// <param name="Data">Data model</param>
         /// <returns></returns>
         [Route("/v1/diff/{id}/{side}")]
-        public IActionResult Get(int id, side side)
+        public IActionResult Get([FromRoute]Data data)
         {
-
-                return Ok($"returning value for id: {id} on {side} side");
+                return Ok($"returning value for id: {data.ID} on {data.Side} side");
         }
 
         /// <summary>
@@ -36,9 +35,8 @@ namespace DiffingAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("/v1/diff/{id}/{side}")]
-        public IActionResult Put(int id, side side, string base64)
+        public IActionResult Post(int id, side side, string base64)
         {
-
             return StatusCode(201);
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DiffingLibrary.Base64
+namespace DiffLibrary.Base64
 {
     /// <summary>
     /// Helper class za kodiranje stringa v BASE64

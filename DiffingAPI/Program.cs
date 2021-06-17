@@ -22,5 +22,7 @@ namespace DiffingAPI
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+        
+        //https://exceptionnotfound.net/ef-core-inmemory-asp-net-core-store-database/
     }
 }

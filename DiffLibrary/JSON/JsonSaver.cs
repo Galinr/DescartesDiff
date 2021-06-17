@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace DiffingLibrary.JSON
+namespace DiffLibrary.JSON
 {
     /// <summary>
-    /// Helper class za shranjvanje in obdelavo modela v json
+    /// Helper class obdelavo modela v json
     /// </summary>
     public class JsonSaver
     {
-        StreamWriter _sw;
         Models.Data _data;
-        
+
+
         /// <summary>
         /// konstruktor razreda zahteva podatke tipa Data
         /// </summary>
@@ -28,6 +28,18 @@ namespace DiffingLibrary.JSON
         }
 
         /// <summary>
+        /// Properti za vračanje vrednosti _data
+        /// </summary>
+        public string ReturnJSON
+        {
+            get
+            {
+                return JsonSerializator();
+            }
+        }
+
+
+        /// <summary>
         /// metoda katera bo vrnila model spremenjen (serializiran) v formatu JSON
         /// </summary>
         /// <returns>JSON format podatkov</returns>
@@ -35,15 +47,5 @@ namespace DiffingLibrary.JSON
         {
             return System.Text.Json.JsonSerializer.Serialize(_data);
         }
-
-        /// <summary>
-        /// Metoda odgovorna za shranjevanje podatkov v TXT datoteko
-        /// </summary>
-        void JsonToFile()
-        {
-            _sw = new StreamWriter(@"..\..\DiffingAPI\JSON.txt");
-            _sw.WriteLine(JsonSerializator());
-        }
-
     }
 }

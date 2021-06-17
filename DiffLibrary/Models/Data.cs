@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DiffingLibrary.Models
+namespace DiffLibrary.Models
 {
     public class Data
     {
@@ -11,12 +12,14 @@ namespace DiffingLibrary.Models
         private string side;
         private string _base;
 
+        [FromRoute(Name = "id")]
         public int ID
         {
             get { return id; }
             set { id = value; }
         }
 
+        [FromRoute(Name = "side")]
         public string Side
         {
             get { return side; }
