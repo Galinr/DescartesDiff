@@ -11,7 +11,7 @@ namespace DiffLibrary.Base64
     {
         public static string Base64Encode(string _base)
         {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes("_base"));
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(_base));
         }
     }
 }

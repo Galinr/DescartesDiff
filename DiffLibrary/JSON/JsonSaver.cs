@@ -12,7 +12,6 @@ namespace DiffLibrary.JSON
     {
         Models.Data _data;
 
-
         /// <summary>
         /// konstruktor razreda zahteva podatke tipa Data
         /// </summary>
