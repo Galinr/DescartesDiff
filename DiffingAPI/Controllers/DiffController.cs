@@ -35,7 +35,7 @@ namespace DiffingAPI.Controllers
                     Base = "aaadafa==",
                     Side = Side.left.ToString()
                 };
-                Post(a);
+                Put(a);
 
                 a = new Data
                 {
@@ -43,14 +43,14 @@ namespace DiffingAPI.Controllers
                     Base = "aaadafa==",
                     Side = Side.right.ToString()
                 };
-                Post(a);
+                Put(a);
                 a = new Data
                 {
                     ID = 2,
                     Base = "dafa==",
                     Side = Side.left.ToString()
                 };
-                Post(a);
+                Put(a);
 
                 a = new Data
                 {
@@ -58,14 +58,14 @@ namespace DiffingAPI.Controllers
                     Base = "aaadafa==",
                     Side = Side.right.ToString()
                 };
-                Post(a);
+                Put(a);
                 a = new Data
                 {
                     ID = 3,
                     Base = "aafdafa==",
                     Side = Side.left.ToString()
                 };
-                Post(a);
+                Put(a);
 
                 a = new Data
                 {
@@ -73,7 +73,7 @@ namespace DiffingAPI.Controllers
                     Base = "aaadafa==",
                     Side = Side.right.ToString()
                 };
-                Post(a);
+                Put(a);
             }
 
 
@@ -101,7 +101,7 @@ namespace DiffingAPI.Controllers
             {
                 return NotFound("404 Not Found");
             }
-            return Ok(String.Format("{0}\n{1}",StatusCode(200) ,DiffLibrary.Base64.BaseCheck.BaseChecker(date[0], date[1]));
+            return Ok(DiffLibrary.Base64.BaseCheck.BaseChecker(date[0], date[1]));
         }
 
 
@@ -136,7 +136,7 @@ namespace DiffingAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("/v1/diff/{id}/{side}")]
-        public async Task<IActionResult> Post([FromBody]IData data)
+        public async Task<IActionResult> Put([FromBody]IData data)
         {
             if(string.IsNullOrEmpty(data.Base))
             {
