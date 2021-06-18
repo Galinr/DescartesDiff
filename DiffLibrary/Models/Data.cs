@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DiffLibrary.Models
 {
-    public class Data
+    public class Data : IData
     {
         private int id;
         private string side;

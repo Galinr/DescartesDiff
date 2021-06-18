@@ -14,7 +14,7 @@ namespace DiffingAPI.Controllers
     public class DiffController : ControllerBase
     {
         private readonly DiffDbContext db;
-        Data a;
+        IData a;
 
         DiffLibrary.JSON.JsonSaver js; 
 
@@ -26,25 +26,55 @@ namespace DiffingAPI.Controllers
 
 
 
-            //var test = db.data.ToList();
-            //if (test.Count() <= 0)
-            //{
-            //    a = new Data
-            //    {
-            //        ID = 1,
-            //        Base = "aaadafa==",
-            //        Side = "left"
-            //    };
-            //    Post(a);
+            var test = db.data.ToList();
+            if (test.Count() <= 0)
+            {
+                a = new Data
+                {
+                    ID = 1,
+                    Base = "aaadafa==",
+                    Side = Side.left.ToString()
+                };
+                Post(a);
 
-            //    a = new Data
-            //    {
-            //        ID = 1,
-            //        Base = "aaadafa==",
-            //        Side = "right"
-            //    };
-            //    Post(a);
-            //}
+                a = new Data
+                {
+                    ID = 1,
+                    Base = "aaadafa==",
+                    Side = Side.right.ToString()
+                };
+                Post(a);
+                a = new Data
+                {
+                    ID = 2,
+                    Base = "dafa==",
+                    Side = Side.left.ToString()
+                };
+                Post(a);
+
+                a = new Data
+                {
+                    ID = 2,
+                    Base = "aaadafa==",
+                    Side = Side.right.ToString()
+                };
+                Post(a);
+                a = new Data
+                {
+                    ID = 3,
+                    Base = "aafdafa==",
+                    Side = Side.left.ToString()
+                };
+                Post(a);
+
+                a = new Data
+                {
+                    ID = 3,
+                    Base = "aaadafa==",
+                    Side = Side.right.ToString()
+                };
+                Post(a);
+            }
 
 
 
@@ -71,8 +101,7 @@ namespace DiffingAPI.Controllers
             {
                 return NotFound("404 Not Found");
             }
-
-                return Ok(DiffLibrary.Base64.BaseCheck.BaseChecker(date[0], date[1]));
+            return Ok(String.Format("{0}\n{1}",StatusCode(200) ,DiffLibrary.Base64.BaseCheck.BaseChecker(date[0], date[1]));
         }
 
 
@@ -84,7 +113,7 @@ namespace DiffingAPI.Controllers
         /// <param name="Data">Data model</param>
         /// <returns></returns>
         [Route("/v1/diff/{id}/{side}")]
-        public IActionResult Get([FromRoute]Data data)
+        public IActionResult Get([FromRoute]IData data)
         {
             List<Data> date = new List<Data>();
             date = db.data.ToList();
@@ -107,19 +136,17 @@ namespace DiffingAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("/v1/diff/{id}/{side}")]
-        public async Task<IActionResult> Post([FromBody]Data data)
+        public async Task<IActionResult> Post([FromBody]IData data)
         {
             if(string.IsNullOrEmpty(data.Base))
             {
                 return StatusCode(400);
             }
 
-            await db.data.AddAsync(data);
+            await db.data.AddAsync((Data)data);
             await db.SaveChangesAsync();
 
             return Created($@"/v1/diff/{data.ID}/{data.Side}", data);
         }
-
-
     }
 }

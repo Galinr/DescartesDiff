@@ -4,8 +4,11 @@ using System.Text;
 
 namespace DiffLibrary.Models
 {
-    class Output : IOutput
+    public class OutputContentDoNotMatch : IOutputLengthOffset
     {
         public string DiffResultType { get; set; }
+        public int Offset { get; set; }
+        public int Length { get; set; }
+
     }
 }

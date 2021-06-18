@@ -10,4 +10,10 @@ namespace DiffLibrary.Models
         SizeDoNotMatch,
         Equals
     }
+
+    public enum Side
+    {
+        left,
+        right
+    }
 }

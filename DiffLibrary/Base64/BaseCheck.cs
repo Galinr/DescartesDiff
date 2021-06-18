@@ -17,29 +17,30 @@ namespace DiffLibrary.Base64
         /// <returns>
         /// Model output z vrednostmi glede na preverbo stringov
         /// </returns>
-        public static Models.Output BaseChecker(Models.Data a, Models.Data b)
+        public static Models.IOutput BaseChecker(Models.Data a, Models.Data b)
         {
             if(a.Base.Length == b.Base.Length)
             {
                 for (int i = 0; i < a.Base.Length; i++)
                 {
                     if (a.Base[i] != b.Base[i])
-                        return new Models.Output
+                        return new Models.OutputContentDoNotMatch
                         {
-                            Type = Models.DiffResultType.ContentDoNotMatch.ToString(),
+                            DiffResultType = Models.DiffResultType.ContentDoNotMatch.ToString(),
                             Length = i,
                             Offset = i
                         };
 
                 }
-                return new Models.Output
+                var v = new Models.Output
                 {
-                    Type = Models.DiffResultType.Equals.ToString()
+                    DiffResultType = Models.DiffResultType.Equals.ToString()
                 };
+                return v;
             }
             return new Models.Output
             {
-                Type = Models.DiffResultType.SizeDoNotMatch.ToString()
+                DiffResultType = Models.DiffResultType.SizeDoNotMatch.ToString()
             };
         }
     }
