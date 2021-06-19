@@ -14,70 +14,13 @@ namespace DiffingAPI.Controllers
     public class DiffController : ControllerBase
     {
         private readonly DiffDbContext db;
-        IData a;
+        Data a;
 
         DiffLibrary.JSON.JsonSaver js; 
 
         public DiffController(DiffLibrary.DataBase.DiffDbContext db)
         {
             this.db = db;
-
-
-
-
-
-            var test = db.data.ToList();
-            if (test.Count() <= 0)
-            {
-                a = new Data
-                {
-                    ID = 1,
-                    Base = "aaadafa==",
-                    Side = Side.left.ToString()
-                };
-                Put(a);
-
-                a = new Data
-                {
-                    ID = 1,
-                    Base = "aaadafa==",
-                    Side = Side.right.ToString()
-                };
-                Put(a);
-                a = new Data
-                {
-                    ID = 2,
-                    Base = "dafa==",
-                    Side = Side.left.ToString()
-                };
-                Put(a);
-
-                a = new Data
-                {
-                    ID = 2,
-                    Base = "aaadafa==",
-                    Side = Side.right.ToString()
-                };
-                Put(a);
-                a = new Data
-                {
-                    ID = 3,
-                    Base = "aafdafa==",
-                    Side = Side.left.ToString()
-                };
-                Put(a);
-
-                a = new Data
-                {
-                    ID = 3,
-                    Base = "aaadafa==",
-                    Side = Side.right.ToString()
-                };
-                Put(a);
-            }
-
-
-
         }
 
 
@@ -86,18 +29,24 @@ namespace DiffingAPI.Controllers
         /// </summary>
         /// <param name="id">ID Modela katerega bomo preverjali</param>
         /// <returns>
-        /// Vrne Model Output kateri vsebuje Tip napravilnosti in offset in length če je napaka to vsebovala
+        /// Vrne Model Output kateri vsebuje Tip napravilnosti, offset in length če je napaka to vsebovala
         /// </returns>
         [Route("/v1/diff/{id}")]
-        public IActionResult Get(int id)
+        public IActionResult Get()
         {
+            int id;
+            if (!Int32.TryParse(RouteData.Values["id"].ToString(), out id))
+            {
+                throw new ArithmeticException("V URI je zahtevan vnos ID v obliki številke\nhttps://localhost:5001/v1/diff/<id>/left.");
+            }
+
             List<Data> date = new List<Data>();
             date = db.data.Where(x=>x.ID.Equals(id)).ToList();
             if (date == null)
             {
                 return BadRequest("Napaka");
             }
-            else if(date.Count < 2)
+            else if(date.Count <= 2)
             {
                 return NotFound("404 Not Found");
             }
@@ -105,45 +54,51 @@ namespace DiffingAPI.Controllers
         }
 
 
-
-
         /// <summary>
-        /// return data za določen ID in Stran
+        /// Metoda POST za vnos novih podatkov v podatkovno bazo.
         /// </summary>
-        /// <param name="Data">Data model</param>
-        /// <returns></returns>
-        [Route("/v1/diff/{id}/{side}")]
-        public IActionResult Get([FromRoute]IData data)
-        {
-            List<Data> date = new List<Data>();
-            date = db.data.ToList();
-            var iskaniPodatek = this.db.data.Find(data.ID);
-
-            if(iskaniPodatek == null)
-            {
-                return BadRequest("Napaka");
-            }
-            js = new DiffLibrary.JSON.JsonSaver(iskaniPodatek);
-             return Ok(js.ReturnJSON);
-        }
-
-
-
-        /// <summary>
-        /// Metoda za shranjevanje Modela v bazo podatkov
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="data">pridobljeni podatki</param>
+        /// <returns>
+        /// </returns>
         [HttpPost]
         [Route("/v1/diff/{id}/{side}")]
-        public async Task<IActionResult> Put([FromBody]IData data)
+        public async Task<IActionResult> Post([FromBody] Data data)
         {
-            if(string.IsNullOrEmpty(data.Base))
+            int id;
+            if(!Int32.TryParse(RouteData.Values["id"].ToString(), out id))
             {
-                return StatusCode(400);
+                throw new ArithmeticException("V URI je zahtevan vnos ID v obliki številke\nhttps://localhost:5001/v1/diff/<id>/left.");
             }
 
-            await db.data.AddAsync((Data)data);
+            string left = Side.left.ToString();
+            string right = Side.right.ToString();
+
+            string side = (string)RouteData.Values["side"];
+            if (side.ToLower() != Side.left.ToString() && side.ToLower() != Side.right.ToString())
+            {
+                throw new FormatException("V URI je zahtevan vnos side v izbiri LEFT ali RIGHT zapisano z malimi črkami.");
+            }
+            
+
+            var obstaja = db.data.ToList();
+            foreach (var vnos in obstaja)
+            {
+                if(vnos.ID == id && vnos.Side == side)
+                {
+                    return Content("Podatek z tem ID in STRANJO že obstaja. Izberi nov ID.");
+                }
+            }
+
+
+            if (string.IsNullOrEmpty(data.Base))
+            {
+                return BadRequest("Base64 je bil prezen oziroma ne obstaja.");
+            }
+
+            data.ID = id;
+            data.Side = side;
+
+            
             await db.SaveChangesAsync();
 
             return Created($@"/v1/diff/{data.ID}/{data.Side}", data);
