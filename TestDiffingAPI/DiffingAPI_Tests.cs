@@ -20,7 +20,7 @@ namespace TestDiffingAPI
         [TestMethod]
         public void PostMethodTest_Success(DiffLibrary.Models.Data data)
         {
-            dc.Post(new DiffLibrary.Models.Data { Base = "Test==" })
+            dc.Put(new DiffLibrary.Models.Data { Base = "Test==" })
             {
                 var result = Microsoft.AspNetCore.Http.StatusCodes.Status201Created;
 
