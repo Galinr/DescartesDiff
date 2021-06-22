@@ -13,6 +13,10 @@ namespace DiffingAPI
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine(  DiffLibrary.Base64.Base64Helper.Base64Encode("World hello"));
+
+
+
             CreateHostBuilder(args).Build().Run();
         }
 

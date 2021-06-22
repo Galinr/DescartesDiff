@@ -42,6 +42,76 @@ namespace XUnitTestProject
             Assert.Equal("String je bil prazen", aEx.Message);
         }
 
+        [Fact]
+        public void BaseCheck_Equal()
+        {
+            DiffLibrary.Models.Data podatek = new DiffLibrary.Models.Data();
 
+            var result = DiffLibrary.Base64.BaseCheck.BaseChecker(
+                new DiffLibrary.Models.Data
+                {
+                    ID = 1,
+                    Side = DiffLibrary.Models.Side.left.ToString(),
+                    Base = "SGVsbG8gd29ybGQ="
+                },
+                new DiffLibrary.Models.Data
+                {
+                    ID = 1,
+                    Side = DiffLibrary.Models.Side.right.ToString(),
+                    Base = "SGVsbG8gd29ybGQ="
+                });
+            var pricakovaniRezultat = DiffLibrary.Models.DiffResultType.Equals.ToString();
+
+
+            Assert.Equal(pricakovaniRezultat, result.DiffResultType);
+        }
+
+        [Fact]
+        public void BaseCheck_SizeDoNotMatch()
+        {
+            DiffLibrary.Models.Data podatek = new DiffLibrary.Models.Data();
+
+            var result = DiffLibrary.Base64.BaseCheck.BaseChecker(
+                new DiffLibrary.Models.Data
+                {
+                    ID = 1,
+                    Side = DiffLibrary.Models.Side.left.ToString(),
+                    Base = "SGVsbG8gd29ybGQ="
+                },
+                new DiffLibrary.Models.Data
+                {
+                    ID = 1,
+                    Side = DiffLibrary.Models.Side.right.ToString(),
+                    Base = "SGVsbG93b3JsZA=="
+                });
+            var pricakovaniRezultat = DiffLibrary.Models.DiffResultType.SizeDoNotMatch.ToString();
+
+
+            Assert.Equal(pricakovaniRezultat, result.DiffResultType);
+        }
+
+        [Fact]
+        public void BaseCheck_ContentDoNotMatch()
+        {
+            DiffLibrary.Models.Data podatek = new DiffLibrary.Models.Data();
+
+            var result = DiffLibrary.Base64.BaseCheck.BaseChecker(
+                new DiffLibrary.Models.Data
+                {
+                    ID = 1,
+                    Side = DiffLibrary.Models.Side.left.ToString(),
+                    Base = "SGVsbG8gd29ybGQ="
+                },
+                new DiffLibrary.Models.Data
+                {
+                    ID = 1,
+                    Side = DiffLibrary.Models.Side.right.ToString(),
+                    Base = "V29ybGQgaGVsbG8="
+                });
+            var pricakovaniRezultat = DiffLibrary.Models.DiffResultType.ContentDoNotMatch.ToString();
+
+
+            Assert.Equal(pricakovaniRezultat, result.DiffResultType);
+        }
     }
 }
