@@ -58,7 +58,7 @@ namespace DiffingAPI.Controllers
         /// </returns>
         [HttpPut]
         [Route("/v1/diff/{id}/{side}")]
-        public async Task<IActionResult> Put([FromBody] IData json)
+        public async Task<IActionResult> Put([FromBody] Data json)
         {
             
             int id;
