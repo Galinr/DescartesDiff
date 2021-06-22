@@ -32,13 +32,13 @@ namespace DiffingAPI.Controllers
         /// Vrne Model Output kateri vsebuje Tip napravilnosti, offset in length če je napaka to vsebovala
         /// </returns>
         [Route("/v1/diff/{id}")]
-        public IActionResult Get()
+        public IActionResult Get(int ID)
         {
-            int id;
-            if (!Int32.TryParse(RouteData.Values["id"].ToString(), out id))
-            {
-                throw new ArithmeticException("V URI je zahtevan vnos ID v obliki številke\nhttps://localhost:5001/v1/diff/<id>/left.");
-            }
+            int id = ID;
+            //if (!Int32.TryParse(RouteData.Values["id"].ToString(), out id))
+            //{
+            //    throw new ArithmeticException("V URI je zahtevan vnos ID v obliki številke\nhttps://localhost:5001/v1/diff/<id>/left.");
+            //}
 
             List<Data> date = new List<Data>();
             date = db.data.Where(x=>x.ID.Equals(id)).ToList();
@@ -46,7 +46,7 @@ namespace DiffingAPI.Controllers
             {
                 return BadRequest("Napaka");
             }
-            else if(date.Count <= 2)
+            else if(date.Count < 2)
             {
                 return NotFound("404 Not Found");
             }
@@ -64,21 +64,34 @@ namespace DiffingAPI.Controllers
         [Route("/v1/diff/{id}/{side}")]
         public async Task<IActionResult> Post([FromBody] Data data)
         {
-            int id;
-            if(!Int32.TryParse(RouteData.Values["id"].ToString(), out id))
+            //TODO - POTREBNO RAZMISLITI O BOLJŠI REŠITVI. IF PREVERJANJE PRED ID IN SIDE JE SMOTANO.
+
+                int id;
+            if (data.ID == 0) //dodal spremembe zarati testa
             {
-                throw new ArithmeticException("V URI je zahtevan vnos ID v obliki številke\nhttps://localhost:5001/v1/diff/<id>/left.");
+                if (!Int32.TryParse(RouteData.Values["id"].ToString(), out id))
+                {
+                    throw new ArithmeticException("V URI je zahtevan vnos ID v obliki številke\nhttps://localhost:5001/v1/diff/<id>/left.");
+                }
             }
+            else id = data.ID;
+
 
             string left = Side.left.ToString();
             string right = Side.right.ToString();
 
-            string side = (string)RouteData.Values["side"];
-            if (side.ToLower() != Side.left.ToString() && side.ToLower() != Side.right.ToString())
+
+            string side;
+            if (data.Side == null)
             {
-                throw new FormatException("V URI je zahtevan vnos side v izbiri LEFT ali RIGHT zapisano z malimi črkami.");
+                side = (string)RouteData.Values["side"];
+                if (side.ToLower() != Side.left.ToString() && side.ToLower() != Side.right.ToString())
+                {
+                    throw new FormatException("V URI je zahtevan vnos side v izbiri LEFT ali RIGHT zapisano z malimi črkami.");
+                }
             }
-            
+            else side = data.Side;
+
 
             var obstaja = db.data.ToList();
             foreach (var vnos in obstaja)

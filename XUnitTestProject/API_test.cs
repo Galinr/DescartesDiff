@@ -1,11 +1,14 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace XUnitTestProject
 {
     public class API_test
     {
+
         [Fact]
         public void Get_Success()
         {
@@ -33,17 +36,40 @@ namespace XUnitTestProject
                 db.SaveChanges();
             }
 
-
             using (var db = new DiffLibrary.DataBase.DiffDbContext(options))
             {
                 DiffingAPI.Controllers.DiffController controller = new DiffingAPI.Controllers.DiffController(db);
+                var vnosi = db.data;
+                var get = controller.Get(1) as OkObjectResult;
 
-                var get = controller.Get();
+                var rezultat = new OkResult().StatusCode;
+                Assert.Equal(rezultat, get.StatusCode);
+            }
+        }
+
+        [Fact]
+        public async Task Post_Success()
+        {
+            var options = new DbContextOptionsBuilder<DiffLibrary.DataBase.DiffDbContext>()
+            .UseInMemoryDatabase(databaseName: "UnitTesting")
+            .Options;
+
+            DiffLibrary.Models.Data data = new DiffLibrary.Models.Data()
+            {
+                ID = 1,
+                Base = "SGVsbG8gd29ybGQ=",
+                Side = DiffLibrary.Models.Side.left.ToString(),
+                Key = 1
+            };
+
+            using(var db = new DiffLibrary.DataBase.DiffDbContext(options))
+            {
+                DiffingAPI.Controllers.DiffController controller = new DiffingAPI.Controllers.DiffController(db);
+
+                var post = await controller.Post(data);
 
 
             }
-
-
         }
     }
 }
