@@ -40,7 +40,7 @@ namespace XUnitTestProject
             {
                 DiffingAPI.Controllers.DiffController controller = new DiffingAPI.Controllers.DiffController(db);
                 var vnosi = db.data;
-                var get = controller.Get(1) as OkObjectResult;
+                var get = controller.Get() as OkObjectResult;
 
                 var rezultat = new OkResult().StatusCode;
                 Assert.Equal(rezultat, get.StatusCode);
@@ -66,7 +66,7 @@ namespace XUnitTestProject
             {
                 DiffingAPI.Controllers.DiffController controller = new DiffingAPI.Controllers.DiffController(db);
 
-                var post = await controller.Post(data);
+                var post = await controller.Put(data);
 
 
             }
