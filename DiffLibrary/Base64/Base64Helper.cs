@@ -16,6 +16,10 @@ namespace DiffLibrary.Base64
 
         public static string Base64Decode(string _base)
         {
+            if (_base == "")
+            {
+                throw new ArgumentException("String je bil prazen");
+            }
             return Encoding.UTF8.GetString(Convert.FromBase64String(_base));
         }
     }
