@@ -51,7 +51,7 @@ namespace DiffingAPI
                 context.Database.EnsureCreated();
 
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/v1/diff/", "DiffingAPI")); //originally "./swagger/v1/swagger.json");
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("./v1/diff/1/", "My API V1")); //originally "./swagger/v1/swagger.json");
 
 
             }

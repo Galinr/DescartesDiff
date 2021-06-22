@@ -1,4 +1,7 @@
 ﻿using DiffingAPI.Controllers;
+using DiffLibrary.Models;
+using FakeItEasy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -11,24 +14,69 @@ namespace TestDiffingAPI
     [TestClass]
     public class DiffingAPI_Tests
     {
-        private readonly DiffController dc;
+        DiffLibrary.DataBase.DiffDbContext database;
+        DiffController diffController;
 
-        public DiffingAPI_Tests(DiffingAPI.Controllers.DiffController dc)
+
+        /// <summary>
+        /// Metoda za inicializacijo potrebnih objektov. 
+        /// za ustvarjanje FAKE baze uprabljen FAKEITEASY NuGet package
+        /// </summary>
+        [ClassInitialize()]
+        public void SetUp()
         {
-            this.dc = dc;
+            database = A.Fake<DiffLibrary.DataBase.DiffDbContext>();
+            diffController = new DiffController(database);
         }
+
+
+        /// <summary>
+        /// Test Put metode. Ta metoda bo uspešna
+        /// </summary>
+        /// <param name="data">
+        /// Model data
+        /// </param>
         [TestMethod]
-        public void PostMethodTest_Success(DiffLibrary.Models.Data data)
+        public async Task PutMethod_Success([FromBody] DiffLibrary.Models.Data data)
         {
-            dc.Put(new DiffLibrary.Models.Data { Base = "Test==" })
+<<<<<<< HEAD
+<<<<<<< HEAD
+            //Arrange
+            var podatek = new Data
+=======
+            dc.Post(new DiffLibrary.Models.Data { Base = "Test==" })
+>>>>>>> parent of d8990d3 (Spremnil izpis v primeru ContentDoNotMatch)
+=======
+            dc.Post(new DiffLibrary.Models.Data { Base = "Test==" })
+>>>>>>> parent of d8990d3 (Spremnil izpis v primeru ContentDoNotMatch)
             {
-                var result = Microsoft.AspNetCore.Http.StatusCodes.Status201Created;
+                Base = "bbb=",
+                ID = 1,
+                Side = DiffLibrary.Models.Side.left.ToString()
+            };
 
-                Assert.IsTrue(true);
-            }
+            //Act
+            var actionResult = await diffController.Put(podatek);
+
+            //Assert
+            var result = actionResult as OkObjectResult;
+
+            Assert.Equals(result, 201);
+
+
         }
 
-        public void 
+
+        [TestMethod]
+        public void GetMethod_Success() 
+        {
+            var podatki = diffController.GetAll();
+
+            Assert.IsNotNull(podatki);
+
+
+
+        }
     
     }
 }
