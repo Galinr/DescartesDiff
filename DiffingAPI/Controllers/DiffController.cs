@@ -26,6 +26,7 @@ namespace DiffingAPI.Controllers
         /// <returns>
         /// Vrne Model Output kateri vsebuje Tip napravilnosti, offset in length če je napaka to vsebovala
         /// </returns>
+        [HttpGet]
         [Route("/v1/diff/{id}")]
         public IActionResult Get()
         {
@@ -114,6 +115,7 @@ namespace DiffingAPI.Controllers
         /// Testna metoda za pridobivanje vseh zapisov v bazi
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         [Route("/v1/diff/")]
         public IActionResult GetAll()
         {

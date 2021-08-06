@@ -32,7 +32,7 @@ namespace DiffingAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiffingAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiffController", Version = "v1" });
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
 
@@ -51,7 +51,9 @@ namespace DiffingAPI
                 context.Database.EnsureCreated();
 
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/v1/diff/", "DiffingAPI")); //originally "./swagger/v1/swagger.json");
+                app.UseSwaggerUI(c => 
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiffController")
+                );
 
 
             }

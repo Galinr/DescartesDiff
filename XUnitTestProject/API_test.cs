@@ -66,7 +66,7 @@ namespace XUnitTestProject
             {
                 DiffingAPI.Controllers.DiffController controller = new DiffingAPI.Controllers.DiffController(db);
 
-                var post = await controller.Post(data);
+                var post = await controller.Put(data);
 
 
             }
